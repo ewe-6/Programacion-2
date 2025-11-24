@@ -53,10 +53,10 @@ public class Main {
                         venderProductoensamblado();
                         break;
                     case 7:
-                        aumentarProductopartes();
+                        aumentarProductopartes(espacioAlmacen, saldo);
                         break;
                     case 8:
-                        aumentarProductoensamblado();
+                        aumentarProductoensamblado(espacioAlmacen, saldo);
                         break;
                     case 9:
                         eliminarProductopartes();
@@ -245,7 +245,7 @@ public class Main {
         }
     }
 
-    private static void aumentarProductopartes(){
+    private static void aumentarProductopartes(int espacioAl, double saldo){
         if(listaProductoporPartes.isEmpty()){
             System.out.println("No hay productos por partes para reabastecer");
             return;
@@ -261,9 +261,19 @@ public class Main {
                 System.out.print("Ingrese la cantidad a aumentar: ");
                 int cant=sc.nextInt();
 
-                listaProductoporPartes.get(i).setCantidad(listaProductoporPartes.get(i).getCantidad()+cant);
-                encontrado = true;
-                System.out.println("\nEl producto " + productoAumentar + " fue actualizado con éxito");
+                if ((listaProductoporPartes.get(i).getEspacioOcupa()*cant)>espacioAl){
+                    System.out.println("La cantidad que intentó ingresar supera el espacio disponible en almacén");
+                    System.out.println("Saliendo...");
+                    return;
+                } else if ((listaProductoporPartes.get(i).getCosto()*cant)>saldo) {
+                    System.out.println("La cantidad que intentó ingresar supera el saldo disponible");
+                    System.out.println("Saliendo...");
+                    return;
+                }else {
+                    listaProductoporPartes.get(i).setCantidad(listaProductoporPartes.get(i).getCantidad() + cant);
+                    encontrado = true;
+                    System.out.println("\nEl producto " + productoAumentar + " fue actualizado con éxito");
+                }
                 break;
             }
         }
@@ -272,7 +282,7 @@ public class Main {
             System.out.println("\n No se encontró el producto " + productoAumentar);
         }
     }
-    private static void aumentarProductoensamblado(){
+    private static void aumentarProductoensamblado(int espacioAl, double saldo){
         if(listaProductoensamblado.isEmpty()){
             System.out.println("No hay productos ensamblados para reabastecer");
             return;
@@ -287,9 +297,19 @@ public class Main {
             if (Objects.equals(listaProductoensamblado.get(i).getNombre(), productoAumentar)) {
                 System.out.print("Ingrese la cantidad a aumentar: ");
                 int cant=sc.nextInt();
-                listaProductoensamblado.get(i).setCantidad(listaProductoensamblado.get(i).getCantidad()+cant);
-                encontrado = true;
-                System.out.println("\nEl producto " + productoAumentar + " fue actualizado con éxito");
+                if ((listaProductoensamblado.get(i).getEspacioOcupa()*cant)>espacioAl){
+                    System.out.println("La cantidad que intentó ingresar supera el espacio disponible en almacén");
+                    System.out.println("Saliendo...");
+                    return;
+                } else if ((listaProductoensamblado.get(i).getCosto()*cant)>saldo) {
+                    System.out.println("La cantidad que intentó ingresar supera el saldo disponible");
+                    System.out.println("Saliendo...");
+                    return;
+                }else {
+                    listaProductoensamblado.get(i).setCantidad(listaProductoensamblado.get(i).getCantidad() + cant);
+                    encontrado = true;
+                    System.out.println("\nEl producto " + productoAumentar + " fue actualizado con éxito");
+                }
                 break;
             }
         }
